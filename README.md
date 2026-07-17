@@ -6,15 +6,21 @@ acknowledge into a searchable archive.
 
 ## Setup
 
+Uses [uv](https://docs.astral.sh/uv/). `uv sync` creates `.venv` and installs
+everything from `uv.lock`; `uv run` executes inside that env.
+
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -e .
+uv sync --extra dev                    # create .venv + install (editable) from the lockfile
 export ANTHROPIC_API_KEY=sk-ant-...
 cp profile.example.toml profile.toml   # then edit it
-litreview init-classics                # review the drafted foundational list
-litreview run                          # do one run by hand
-litreview serve                        # read at http://localhost:8000
+uv run litreview init-classics         # review the drafted foundational list
+uv run litreview run                   # do one run by hand
+uv run litreview serve                 # read at http://localhost:8000
 ```
+
+(Activate the env with `source .venv/bin/activate` if you'd rather drop the
+`uv run` prefix. Prefer pip? `pip install -e ".[dev]"` still works against the
+same `pyproject.toml`.)
 
 ## Commands
 
@@ -52,6 +58,5 @@ override the default model (`claude-opus-4-8`).
 ## Tests
 
 ```bash
-pip install -e ".[dev]"
-pytest
+uv run pytest
 ```
