@@ -67,5 +67,13 @@ class ClaudeRanker:
             messages=[{"role": "user", "content": prompt}],
             output_format=_Selection,
         )
-        chosen = msg.parsed_output.indices[:n]
+        # De-dup indices order-preservingly: a repeated index would map the same
+        # Candidate twice and trip the papers.dedup_key UNIQUE constraint on store.
+        seen: set[int] = set()
+        chosen: list[int] = []
+        for i in msg.parsed_output.indices:
+            if i not in seen:
+                seen.add(i)
+                chosen.append(i)
+        chosen = chosen[:n]
         return [candidates[i] for i in chosen if 0 <= i < len(candidates)]

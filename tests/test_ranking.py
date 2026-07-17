@@ -1,5 +1,5 @@
 from litreview.models import Candidate
-from litreview.ranking import allocate_slots, FakeRanker
+from litreview.ranking import allocate_slots, FakeRanker, ClaudeRanker
 
 
 def _c(i, kind="fresh"):
@@ -32,3 +32,35 @@ def test_fake_ranker_takes_first_n():
     cands = [_c(i) for i in range(5)]
     picked = FakeRanker().select(cands, profile=None, n=2)
     assert [c.source_id for c in picked] == ["W0", "W1"]
+
+
+class _FakeParsed:
+    def __init__(self, indices):
+        self.parsed_output = type("P", (), {"indices": indices})()
+
+
+class _FakeMessages:
+    def __init__(self, indices):
+        self._indices = indices
+
+    def parse(self, **kwargs):
+        return _FakeParsed(self._indices)
+
+
+class _FakeClient:
+    def __init__(self, indices):
+        self.messages = _FakeMessages(indices)
+
+
+class _FakeProfile:
+    description = "test researcher"
+    domain_focus = ["x"]
+    portable_ml = "y"
+
+
+def test_claude_ranker_dedups_and_drops_out_of_range():
+    cands = [_c(i) for i in range(3)]  # valid indices: 0, 1, 2
+    ranker = ClaudeRanker(client=_FakeClient([2, 2, 0, 5]))
+    picked = ranker.select(cands, profile=_FakeProfile(), n=3)
+    # 2 deduped, 0 kept in order, out-of-range 5 dropped
+    assert [c.source_id for c in picked] == ["W2", "W0"]
