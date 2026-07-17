@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>This week's papers</h1>
+{% if not summaries %}
+  <p>Nothing unread. Check back after the next run.</p>
+{% else %}
+  <form method="post" action="/read-all"><button type="submit">Mark all read</button></form>
+  {% for s in summaries %}
+  <div class="card" id="card-{{ s.summary_id }}">
+    <h3>{{ s.title }}</h3>
+    <div class="meta">
+      {{ s.authors | join(", ") }} · {{ s.venue or "—" }} · {{ s.published_date or "" }}
+      {% if s.is_oa %}<span class="badge">open access</span>{% endif %}
+      {% if s.kind == "classic" %}<span class="badge">classic</span>{% endif %}
+      {% for ax in s.why_relevant_axes %}<span class="badge">{{ ax }}</span>{% endfor %}
+    </div>
+    <div class="field"><b>Approach</b>{{ s.approach }}</div>
+    <div class="field"><b>Result</b>{{ s.result }}</div>
+    <div class="field"><b>Why it's novel</b>{{ s.novelty }}</div>
+    <div class="field"><b>Why it's relevant to you</b>{{ s.relevance }}</div>
+    {% if s.url %}<p><a href="{{ s.url }}" target="_blank" rel="noopener">Open paper ↗</a></p>{% endif %}
+    <div class="field">
+      Rate:
+      {% for n in [1, 2, 3, 4, 5] %}
+      <button hx-post="/rate/{{ s.summary_id }}" hx-vals='{"rating": {{ n }}}' hx-swap="none">{{ n }}</button>
+      {% endfor %}
+    </div>
+    <button hx-post="/read/{{ s.summary_id }}"
+            hx-target="#card-{{ s.summary_id }}" hx-swap="outerHTML">
+      Mark as read
+    </button>
+  </div>
+  {% endfor %}
+{% endif %}
+{% endblock %}

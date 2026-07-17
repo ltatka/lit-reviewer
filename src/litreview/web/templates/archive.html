@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Archive</h1>
+<form method="get" action="/archive">
+  <input type="text" name="q" value="{{ q }}" placeholder="search titles...">
+  <button type="submit">Search</button>
+</form>
+{% if not summaries %}
+  <p>No archived papers{% if q %} matching "{{ q }}"{% endif %}.</p>
+{% else %}
+  {% for s in summaries %}
+  <div class="card">
+    <h3>{{ s.title }}</h3>
+    <div class="meta">
+      {{ s.authors | join(", ") }} · {{ s.venue or "—" }} · read {{ s.read_at or "" }}
+      {% for ax in s.why_relevant_axes %}<span class="badge">{{ ax }}</span>{% endfor %}
+    </div>
+    <div class="field"><b>Why it's relevant to you</b>{{ s.relevance }}</div>
+    {% if s.url %}<p><a href="{{ s.url }}" target="_blank" rel="noopener">Open paper ↗</a></p>{% endif %}
+  </div>
+  {% endfor %}
+{% endif %}
+{% endblock %}

@@ -27,7 +27,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.setuptools.package-data]
-litreview = ["schema.sql"]
+litreview = ["schema.sql", "web/templates/*.html"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

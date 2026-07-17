@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Status</h1>
+{% if not run %}
+  <p>No runs yet. Run <code>litreview run</code>.</p>
+{% else %}
+  <p>Last run #{{ run.id }} — <b>{{ run.status }}</b></p>
+  <ul>
+    <li>Started: {{ run.started_at }}</li>
+    <li>Finished: {{ run.finished_at or "—" }}</li>
+    <li>Candidates: {{ run.n_candidates if run.n_candidates is not none else "—" }}</li>
+    <li>Selected: {{ run.n_selected if run.n_selected is not none else "—" }}</li>
+    {% if run.error %}<li style="color:#b00">Error: {{ run.error }}</li>{% endif %}
+  </ul>
+{% endif %}
+{% endblock %}
