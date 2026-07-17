@@ -3,9 +3,11 @@ from __future__ import annotations
 from ..config import Profile
 from .base import PaperSource
 from .openalex import OpenAlexSource
+from .pubmed import PubMedSource
 
 SOURCES: dict[str, type] = {
     "openalex": OpenAlexSource,
+    "pubmed": PubMedSource,
 }
 
 
@@ -19,4 +21,4 @@ def build_sources(profile: Profile) -> list[PaperSource]:
     return built
 
 
-__all__ = ["PaperSource", "SOURCES", "build_sources", "OpenAlexSource"]
+__all__ = ["PaperSource", "SOURCES", "build_sources", "OpenAlexSource", "PubMedSource"]

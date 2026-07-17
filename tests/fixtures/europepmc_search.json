@@ -1,0 +1,27 @@
+{
+  "resultList": {
+    "result": [
+      {
+        "id": "40000001",
+        "source": "MED",
+        "doi": "10.9999/pmid1",
+        "title": "Targeted protein degradation in cancer",
+        "authorString": "Roe J, Doe J.",
+        "journalTitle": "Cell",
+        "firstPublicationDate": "2026-07-02",
+        "abstractText": "We describe a new PROTAC.",
+        "isOpenAccess": "Y",
+        "fullTextUrlList": {"fullTextUrl": [{"url": "https://europepmc.org/article/MED/40000001"}]}
+      },
+      {
+        "id": "40000002",
+        "source": "MED",
+        "title": "No abstract paper",
+        "authorString": "Anon A.",
+        "journalTitle": "J Obscure",
+        "firstPublicationDate": "2026-06-20",
+        "isOpenAccess": "N"
+      }
+    ]
+  }
+}
