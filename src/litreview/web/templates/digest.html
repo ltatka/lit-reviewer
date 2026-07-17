@@ -9,7 +9,7 @@
   <div class="card" id="card-{{ s.summary_id }}">
     <h3>{{ s.title }}</h3>
     <div class="meta">
-      {{ s.authors | join(", ") }} · {{ s.venue or "—" }} · {{ s.published_date or "" }}
+      {{ s.authors | join(", ") }} · {{ s.venue or "—" }}{% if s.published_date %} · Published {{ s.published_date }}{% endif %}
       {% if s.is_oa %}<span class="badge">open access</span>{% endif %}
       {% if s.kind == "classic" %}<span class="badge">classic</span>{% endif %}
       {% for ax in s.why_relevant_axes %}<span class="badge">{{ ax }}</span>{% endfor %}

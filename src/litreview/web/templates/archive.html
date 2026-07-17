@@ -12,7 +12,7 @@
   <div class="card">
     <h3>{{ s.title }}</h3>
     <div class="meta">
-      {{ s.authors | join(", ") }} · {{ s.venue or "—" }} · read {{ s.read_at or "" }}
+      {{ s.authors | join(", ") }} · {{ s.venue or "—" }}{% if s.published_date %} · Published {{ s.published_date }}{% endif %} · read {{ s.read_at or "" }}
       {% for ax in s.why_relevant_axes %}<span class="badge">{{ ax }}</span>{% endfor %}
     </div>
     <div class="field"><b>Why it's relevant to you</b>{{ s.relevance }}</div>

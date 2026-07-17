@@ -10,7 +10,8 @@ def _seed(tmp_path):
     run = a.create_run()
     a.store_selection(run, [
         (Candidate(source="openalex", source_id="W1", title="Proteomics breakthrough",
-                   authors=["J. Roe"], doi="10.1/a", kind="fresh", is_oa=True),
+                   authors=["J. Roe"], doi="10.1/a", kind="fresh", is_oa=True,
+                   published_date="2026-07-01"),
          Summary("The approach.", "The result.", "The novelty.",
                  "Why it matters to you.", ["domain"])),
     ])
@@ -25,6 +26,17 @@ def test_digest_shows_unread(tmp_path):
     assert resp.status_code == 200
     assert "Proteomics breakthrough" in resp.text
     assert "The novelty." in resp.text
+    assert "Published 2026-07-01" in resp.text
+
+
+def test_publication_date_shows_in_digest_and_archive(tmp_path):
+    archive = _seed(tmp_path)
+    app = create_app(archive)
+    client = TestClient(app)
+    assert "Published 2026-07-01" in client.get("/").text
+    sid = archive.unread_summaries()[0]["summary_id"]
+    client.post(f"/read/{sid}")
+    assert "Published 2026-07-01" in client.get("/archive").text
 
 
 def test_mark_read_then_appears_in_archive(tmp_path):
