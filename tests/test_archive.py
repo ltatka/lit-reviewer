@@ -69,6 +69,80 @@ def test_archived_search(archive):
     assert [r["title"] for r in hits] == ["Proteomics advances"]
 
 
+def test_store_and_read_eli12(archive):
+    run = archive.create_run()
+    c = _cand("W1", doi="10.1/a", title="Kid friendly paper")
+    archive.store_selection(run, [
+        (c, Summary("appr", "res", "nov", "rel", ["domain"], eli12="kid friendly")),
+    ])
+    assert archive.unread_summaries()[0]["eli12"] == "kid friendly"
+
+
+def test_initialize_migrates_old_db_missing_eli12_column(tmp_path):
+    old_ddl = """
+    CREATE TABLE runs (
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        started_at    TEXT NOT NULL,
+        finished_at   TEXT,
+        n_candidates  INTEGER,
+        n_selected    INTEGER,
+        status        TEXT NOT NULL DEFAULT 'running',
+        error         TEXT
+    );
+    CREATE TABLE papers (
+        id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+        dedup_key          TEXT NOT NULL UNIQUE,
+        doi                TEXT,
+        source             TEXT NOT NULL,
+        source_id          TEXT NOT NULL,
+        title              TEXT NOT NULL,
+        authors            TEXT NOT NULL DEFAULT '[]',
+        venue              TEXT,
+        published_date     TEXT,
+        abstract           TEXT,
+        url                TEXT,
+        is_oa              INTEGER NOT NULL DEFAULT 0,
+        kind               TEXT NOT NULL DEFAULT 'fresh',
+        first_surfaced_run INTEGER REFERENCES runs(id)
+    );
+    CREATE TABLE summaries (
+        id                INTEGER PRIMARY KEY AUTOINCREMENT,
+        paper_id          INTEGER NOT NULL REFERENCES papers(id),
+        approach          TEXT NOT NULL,
+        result            TEXT NOT NULL,
+        novelty           TEXT NOT NULL,
+        relevance         TEXT NOT NULL,
+        why_relevant_axes TEXT NOT NULL DEFAULT '[]',
+        status            TEXT NOT NULL DEFAULT 'unread',
+        read_at           TEXT,
+        rating            INTEGER
+    );
+    CREATE TABLE classics (
+        id      INTEGER PRIMARY KEY AUTOINCREMENT,
+        title   TEXT NOT NULL,
+        authors TEXT NOT NULL DEFAULT '[]',
+        doi     TEXT,
+        note    TEXT NOT NULL DEFAULT '',
+        rank    INTEGER NOT NULL DEFAULT 0,
+        status  TEXT NOT NULL DEFAULT 'pending'
+    );
+    """
+    import sqlite3
+    db_path = str(tmp_path / "old.db")
+    conn = sqlite3.connect(db_path)
+    conn.executescript(old_ddl)
+    conn.commit()
+    conn.close()
+
+    a = Archive(db_path)
+    a.initialize()
+
+    conn = sqlite3.connect(db_path)
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(summaries)")}
+    conn.close()
+    assert "eli12" in cols
+
+
 def test_set_rating(archive):
     run = archive.create_run()
     archive.store_selection(run, [(_cand("W1", doi="10.1/a"), Summary("a", "r", "n", "v", []))])

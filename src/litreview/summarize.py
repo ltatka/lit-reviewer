@@ -22,6 +22,7 @@ class FakeSummarizer:
             novelty="Why it is novel.",
             relevance=f"Why {candidate.title} is relevant to you.",
             why_relevant_axes=["domain"],
+            eli12=f"Imagine {candidate.title} explained simply.",
         )
 
 
@@ -31,6 +32,7 @@ class _SummaryOut(BaseModel):
     novelty: str
     relevance: str
     why_relevant_axes: list[str]
+    eli12: str
 
 
 class ClaudeSummarizer:
@@ -43,7 +45,9 @@ class ClaudeSummarizer:
             "You summarize a scientific paper for a specific researcher. Be "
             "concrete and concise. 'relevance' must explain why THIS researcher "
             "should care. 'why_relevant_axes' is a subset of "
-            "['domain', 'portable_ml', 'classic']."
+            "['domain', 'portable_ml', 'classic']. 'eli12' is an 'explain like "
+            "I'm 12' paragraph: 3-4 sentences, plain language, no jargon or "
+            "acronyms, analogies welcome, so a curious 12-year-old could follow it."
         )
         prompt = (
             f"Researcher profile:\n{profile.description}\n"
@@ -69,4 +73,5 @@ class ClaudeSummarizer:
             novelty=out.novelty,
             relevance=out.relevance,
             why_relevant_axes=out.why_relevant_axes,
+            eli12=out.eli12,
         )
