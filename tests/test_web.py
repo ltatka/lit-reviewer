@@ -13,7 +13,8 @@ def _seed(tmp_path):
                    authors=["J. Roe"], doi="10.1/a", kind="fresh", is_oa=True,
                    published_date="2026-07-01"),
          Summary("The approach.", "The result.", "The novelty.",
-                 "Why it matters to you.", ["domain"])),
+                 "Why it matters to you.", ["domain"],
+                 eli12="A kid-friendly explanation.")),
     ])
     a.finish_run(run, 5, 1, status="ok")
     return a
@@ -37,6 +38,20 @@ def test_publication_date_shows_in_digest_and_archive(tmp_path):
     sid = archive.unread_summaries()[0]["summary_id"]
     client.post(f"/read/{sid}")
     assert "Published 2026-07-01" in client.get("/archive").text
+
+
+def test_eli12_shows_in_digest_and_archive(tmp_path):
+    archive = _seed(tmp_path)
+    app = create_app(archive)
+    client = TestClient(app)
+    resp = client.get("/")
+    assert "Explain Like I'm 12" in resp.text
+    assert "A kid-friendly explanation." in resp.text
+    sid = archive.unread_summaries()[0]["summary_id"]
+    client.post(f"/read/{sid}")
+    resp = client.get("/archive")
+    assert "Explain Like I'm 12" in resp.text
+    assert "A kid-friendly explanation." in resp.text
 
 
 def test_mark_read_then_appears_in_archive(tmp_path):
