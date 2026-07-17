@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS summaries (
     result            TEXT NOT NULL,
     novelty           TEXT NOT NULL,
     relevance         TEXT NOT NULL,
+    eli12             TEXT NOT NULL DEFAULT '',
     why_relevant_axes TEXT NOT NULL DEFAULT '[]',    -- JSON array
     status            TEXT NOT NULL DEFAULT 'unread', -- unread|read
     read_at           TEXT,

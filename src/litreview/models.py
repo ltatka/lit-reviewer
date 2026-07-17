@@ -31,6 +31,7 @@ class Summary:
     novelty: str
     relevance: str
     why_relevant_axes: list[str] = field(default_factory=list)
+    eli12: str = ""
 
 
 @dataclass

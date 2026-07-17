@@ -9,3 +9,4 @@ def test_fake_summarizer_returns_summary():
     assert s.approach
     assert "Cool Paper" in s.relevance
     assert isinstance(s.why_relevant_axes, list)
+    assert isinstance(s.eli12, str) and s.eli12

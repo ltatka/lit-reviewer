@@ -26,6 +26,11 @@ class Archive:
         ddl = resources.files("litreview").joinpath("schema.sql").read_text()
         with self._connect() as conn:
             conn.executescript(ddl)
+            cols = {r["name"] for r in conn.execute("PRAGMA table_info(summaries)")}
+            if "eli12" not in cols:
+                conn.execute(
+                    "ALTER TABLE summaries ADD COLUMN eli12 TEXT NOT NULL DEFAULT ''"
+                )
 
     # ---- dedup -------------------------------------------------------------
 
@@ -101,11 +106,12 @@ class Archive:
                 paper_id = int(cur.lastrowid)
                 conn.execute(
                     "INSERT INTO summaries (paper_id, approach, result, novelty, "
-                    "relevance, why_relevant_axes, status) "
-                    "VALUES (?,?,?,?,?,?, 'unread')",
+                    "relevance, why_relevant_axes, eli12, status) "
+                    "VALUES (?,?,?,?,?,?,?, 'unread')",
                     (
                         paper_id, summ.approach, summ.result, summ.novelty,
                         summ.relevance, json.dumps(summ.why_relevant_axes),
+                        summ.eli12,
                     ),
                 )
                 if cand.kind == "classic":
@@ -160,7 +166,7 @@ class Archive:
 
     _SELECT = (
         "SELECT s.id AS summary_id, s.approach, s.result, s.novelty, s.relevance, "
-        "s.why_relevant_axes, s.status, s.read_at, s.rating, "
+        "s.eli12, s.why_relevant_axes, s.status, s.read_at, s.rating, "
         "p.title, p.authors, p.venue, p.published_date, p.url, p.is_oa, p.kind, "
         "p.first_surfaced_run "
         "FROM summaries s JOIN papers p ON p.id = s.paper_id "
