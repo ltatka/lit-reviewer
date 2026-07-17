@@ -5,3 +5,8 @@ venv/
 litreview.db
 profile.toml
 .env
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+*.whl

@@ -1,0 +1,22 @@
+{
+  "collection": [
+    {
+      "doi": "10.1101/2026.07.01.500001",
+      "title": "Cryo-EM of a degrader complex",
+      "authors": "Roe, J.; Doe, J.",
+      "category": "biochemistry",
+      "date": "2026-07-01",
+      "abstract": "We solved the structure.",
+      "server": "biorxiv"
+    },
+    {
+      "doi": "10.1101/2026.07.02.500002",
+      "title": "A neuroscience preprint",
+      "authors": "Smith, A.",
+      "category": "neuroscience",
+      "date": "2026-07-02",
+      "abstract": "Unrelated.",
+      "server": "biorxiv"
+    }
+  ]
+}

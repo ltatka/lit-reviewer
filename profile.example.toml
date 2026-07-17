@@ -1,0 +1,31 @@
+[identity]
+# First-person description of your research interests. The LLM reads this
+# verbatim to judge which papers are relevant to you.
+description = """
+I'm a data scientist working on proteomics / TF-focused drug discovery —
+DIA mass spec, targeted protein degradation, ML for proteomics. I also want
+exposure to broadly cool ML/AI that could port into our field, and general
+things a data-science professional should know about.
+"""
+
+[axes]
+domain_focus = ["proteomics", "targeted protein degradation", "DIA-MS"]
+portable_ml = "New ML/AI methods that could plausibly transfer to proteomics, or that a DS professional should know."
+
+[schedule]
+cadence_days = 7
+picks_per_run = 5
+classic_fraction = 0.30
+
+[sources]
+enabled = ["openalex", "pubmed", "biorxiv"]
+
+[sources.openalex]
+query = "proteomics OR mass spectrometry proteomics"
+
+[sources.pubmed]
+query = "proteomics"
+
+[sources.biorxiv]
+# bioRxiv is filtered by subject category (see get_categories).
+category = "biochemistry"

@@ -1,0 +1,27 @@
+{
+  "results": [
+    {
+      "id": "https://openalex.org/W123",
+      "doi": "https://doi.org/10.1234/abc",
+      "title": "A DIA-MS method for fast proteomics",
+      "publication_date": "2026-07-01",
+      "authorships": [
+        {"author": {"display_name": "Jane Roe"}},
+        {"author": {"display_name": "John Doe"}}
+      ],
+      "primary_location": {"source": {"display_name": "Nature Methods"}},
+      "open_access": {"is_oa": true},
+      "abstract_inverted_index": {"Fast": [0], "proteomics": [1], "method.": [2]}
+    },
+    {
+      "id": "https://openalex.org/W124",
+      "doi": null,
+      "title": "No-DOI preprint",
+      "publication_date": "2026-06-15",
+      "authorships": [{"author": {"display_name": "A. Nonymous"}}],
+      "primary_location": {"source": null},
+      "open_access": {"is_oa": false},
+      "abstract_inverted_index": null
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.talus.litreview</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/__USER__/__REPO__/.venv/bin/litreview</string>
+    <string>--profile</string><string>/Users/__USER__/__REPO__/profile.toml</string>
+    <string>--db</string><string>/Users/__USER__/__REPO__/litreview.db</string>
+    <string>run</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict><key>ANTHROPIC_API_KEY</key><string>__YOUR_KEY__</string></dict>
+  <key>StartCalendarInterval</key>
+  <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>7</integer><key>Minute</key><integer>0</integer></dict>
+  <key>StandardOutPath</key><string>/Users/__USER__/__REPO__/litreview.log</string>
+  <key>StandardErrorPath</key><string>/Users/__USER__/__REPO__/litreview.err</string>
+</dict>
+</plist>
