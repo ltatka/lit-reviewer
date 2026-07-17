@@ -1,0 +1,72 @@
+[identity]
+# First-person description of your research interests. The LLM reads this
+# verbatim to judge which papers are relevant to you.
+description = """
+I'm a data scientist working on proteomics / TF-focused drug discovery —
+DIA mass spec, covalent drug discovery, ML for proteomics. I also want
+exposure to broadly cool ML/AI that could port into our field, and general
+things a data-science professional should know about.
+
+I am NOT interested in purely proteomics, mass-spec, DIA, biology papers. I only
+care about proteomics papers if there is a computational, ML, AI component. I do
+not care about molecular dynamics or simulations. I am not interested in protein
+folding.
+
+I am interested in predicting what molecules will bind to proteins, especially
+covalently. Target deconvolution, meaning figuring out what protein we hit from
+a perturbation measurment. How to call protein hits when you have lots of data
+with different variance, sparsity, effects.
+
+How to represent proteins for ML models. Foundation models of cells, proteins.
+How to represent molecules and peptides. Co-embedding molecules and proteins, or
+co-embedding proteins and peptide drugs.
+
+Some relevant companies to look out for: isomorphic labs, terray therapeutics,
+tahoe therapeutics.
+
+There are probably a lot of relevant papers in genomics, RNA-seq, and similar
+which could be relevant to proteomics.
+
+
+"""
+
+[axes]
+domain_focus = [
+    "computational proteomics",
+    "protein language models",
+    "protein representation learning",
+    "covalent drug discovery",
+    "predicting covalent binding",
+    "predicting ligandability",
+    "target deconvolution",
+    "molecule and peptide representation learning",
+    "co-embedding models",
+    "contrastive learning",
+]
+portable_ml = "New ML/AI methods that could plausibly transfer to proteomics or drug discovery — representation learning, contrastive learning, foundation models, co-embedding / multimodal alignment, methods for noisy/sparse/heteroscedastic high-dimensional data — or that a data-science professional should know about."
+
+[schedule]
+cadence_days = 7
+picks_per_run = 5
+classic_fraction = 0.30
+
+[sources]
+enabled = ["openalex", "pubmed", "biorxiv"]
+
+# OpenAlex indexes both biology and CS/ML venues, so this query pairs a
+# proteomics/drug-discovery clause with an ML clause, and also pulls the
+# specific method papers you named. Boolean AND/OR, parentheses, and quoted
+# phrases are all supported. (Single-quoted TOML string so the double quotes
+# pass through literally.)
+[sources.openalex]
+query = '(proteomics OR chemoproteomics OR "drug discovery" OR ligandability OR "target deconvolution" OR peptide) AND ("machine learning" OR "deep learning" OR "neural network" OR "representation learning" OR "language model" OR "foundation model" OR "contrastive learning" OR "co-embedding" OR transformer OR "graph neural network" OR "self-supervised" OR "generative model" OR "diffusion model")'
+
+# Europe PMC (PubMed/MEDLINE) is biomedical, so keep it to the computational
+# proteomics / drug-discovery intersection.
+[sources.pubmed]
+query = '(proteomics OR chemoproteomics OR "target deconvolution" OR ligandability OR "covalent inhibitor" OR peptide) AND ("machine learning" OR "deep learning" OR "neural network" OR "representation learning" OR "language model" OR "foundation model" OR "contrastive learning" OR transformer OR "graph neural network" OR "self-supervised" OR "generative model")'
+
+# bioRxiv has no keyword search — only a subject category. "bioinformatics" is
+# the best single fit for computational/ML preprints in your space.
+[sources.biorxiv]
+category = "bioinformatics"
