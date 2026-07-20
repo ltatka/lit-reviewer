@@ -18,7 +18,10 @@ class BioRxivSource:
 
     def fetch(self, query: str, since: datetime.date | None) -> list[Candidate]:
         server = self.config.get("server", "biorxiv")
-        start = (since or (datetime.date.today() - datetime.timedelta(days=7))).isoformat()
+        window = int(self.config.get("lookback_days", 30))
+        floor = datetime.date.today() - datetime.timedelta(days=window)
+        start_date = max(since, floor) if since is not None else floor
+        start = start_date.isoformat()
         end = datetime.date.today().isoformat()
         url = f"{_BASE}/{server}/{start}/{end}/0"
         resp = self._client.get(url)

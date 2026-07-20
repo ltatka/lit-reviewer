@@ -52,4 +52,18 @@ def test_biorxiv_builds_dated_details_url():
     fake = FakeClient(payload)
     BioRxivSource({}, client=fake).fetch("x", since=datetime.date(2026, 7, 1))
     url, _ = fake.calls[0]
-    assert "/details/biorxiv/2026-07-01/" in url
+    expected = max(
+        datetime.date(2026, 7, 1),
+        datetime.date.today() - datetime.timedelta(days=30),
+    ).isoformat()
+    assert f"/details/biorxiv/{expected}/" in url
+
+
+def test_biorxiv_clamps_long_lookback():
+    payload = json.loads(FIX.read_text())
+    fake = FakeClient(payload)
+    since = datetime.date.today() - datetime.timedelta(days=730)
+    BioRxivSource({}, client=fake).fetch("x", since=since)
+    url, _ = fake.calls[0]
+    expected = (datetime.date.today() - datetime.timedelta(days=30)).isoformat()
+    assert f"/details/biorxiv/{expected}/" in url
