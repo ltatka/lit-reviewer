@@ -16,7 +16,7 @@
       {% for ax in s.why_relevant_axes %}<span class="badge">{{ ax }}</span>{% endfor %}
     </div>
     <div class="field"><b>Why it's relevant to you</b>{{ s.relevance }}</div>
-    {% if s.eli12 %}<div class="field"><b>Explain Like I'm 12</b>{{ s.eli12 }}</div>{% endif %}
+    {% if s.eli12 %}<div class="field"><b>In plain terms</b>{{ s.eli12 }}</div>{% endif %}
     {% if s.url %}<p><a href="{{ s.url }}" target="_blank" rel="noopener">Open paper ↗</a></p>{% endif %}
   </div>
   {% endfor %}

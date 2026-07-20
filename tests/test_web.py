@@ -45,12 +45,12 @@ def test_eli12_shows_in_digest_and_archive(tmp_path):
     app = create_app(archive)
     client = TestClient(app)
     resp = client.get("/")
-    assert "Explain Like I'm 12" in resp.text
+    assert "In plain terms" in resp.text
     assert "A kid-friendly explanation." in resp.text
     sid = archive.unread_summaries()[0]["summary_id"]
     client.post(f"/read/{sid}")
     resp = client.get("/archive")
-    assert "Explain Like I'm 12" in resp.text
+    assert "In plain terms" in resp.text
     assert "A kid-friendly explanation." in resp.text
 
 

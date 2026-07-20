@@ -45,9 +45,15 @@ class ClaudeSummarizer:
             "You summarize a scientific paper for a specific researcher. Be "
             "concrete and concise. 'relevance' must explain why THIS researcher "
             "should care. 'why_relevant_axes' is a subset of "
-            "['domain', 'portable_ml', 'classic']. 'eli12' is an 'explain like "
-            "I'm 12' paragraph: 3-4 sentences, plain language, no jargon or "
-            "acronyms, analogies welcome, so a curious 12-year-old could follow it."
+            "['domain', 'portable_ml', 'classic']. 'eli12' is a plain-language "
+            "explanation (3-4 sentences) for a technically literate NON-specialist: "
+            "the reader knows basic ML/statistics (e.g. regression, classification, "
+            "embeddings at a high level) and basic biology (e.g. protein binding), "
+            "but is NOT an expert in ML, statistics, or this paper's subfield. "
+            "Explain the core idea and why it works using those basics; you may use "
+            "common terms like regression/classification/model/embedding freely, but "
+            "define or avoid specialized jargon and acronyms. Do not dumb it down to "
+            "a child's level."
         )
         prompt = (
             f"Researcher profile:\n{profile.description}\n"
