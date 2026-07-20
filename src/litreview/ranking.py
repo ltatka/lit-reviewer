@@ -44,7 +44,7 @@ class ClaudeRanker:
         if n <= 0 or not candidates:
             return []
         listing = "\n".join(
-            f"[{i}] {c.title}\n    {(c.abstract or '')[:1500]}"
+            f"[{i}] ({c.published_date or 'n.d.'}) {c.title}\n    {(c.abstract or '')[:1500]}"
             for i, c in enumerate(candidates)
         )
         system = (
@@ -71,6 +71,10 @@ class ClaudeRanker:
             "results'). The methodological novelty, not the application, must be the "
             "point.\n"
             "When uncertain, EXCLUDE.\n\n"
+            "A publication date is shown in parentheses before each title; all else "
+            "being roughly equal in quality and fit, prefer the more recent paper — "
+            "but treat this only as a soft tiebreaker, never as a reason to include "
+            "a paper that does not clearly meet the bar above.\n\n"
             f"From these {len(candidates)} candidates, return the 0-based indices of "
             f"AT MOST {n} that clearly meet the bar, best first. Return an empty "
             "list if none qualify. Do not include borderline or filler papers.\n\n"
