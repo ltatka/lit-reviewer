@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import datetime
+
 from .archive import Archive
 from .config import Profile
 from .models import Candidate, ClassicEntry
@@ -33,7 +35,7 @@ class Pipeline:
     def run(self) -> dict:
         run_id = self.archive.create_run()
         try:
-            since = self.archive.last_successful_run_date()
+            since = datetime.date.today() - datetime.timedelta(days=self.profile.lookback_days)
 
             fresh_pool: list[Candidate] = []
             for src in self.sources:

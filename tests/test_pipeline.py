@@ -54,16 +54,13 @@ def test_pipeline_dedups_across_runs(profile, tmp_path):
     assert len(total_titles) == len(set(total_titles))
 
 
-def test_pipeline_passes_last_run_date_to_sources(profile, tmp_path):
+def test_pipeline_uses_lookback_window(profile, tmp_path):
     archive = Archive(str(tmp_path / "p.db"))
     archive.initialize()
     src = StubSource("openalex", [_fresh(i) for i in range(3)])
     Pipeline(profile, archive, [src], FakeRanker(), FakeSummarizer()).run()
-    # first run: no prior successful run, so since is None
-    assert src.seen_since is None
-    src2 = StubSource("openalex", [_fresh(i + 100) for i in range(3)])
-    Pipeline(profile, archive, [src2], FakeRanker(), FakeSummarizer()).run()
-    assert src2.seen_since == datetime.date.today()
+    expected_since = datetime.date.today() - datetime.timedelta(days=profile.lookback_days)
+    assert src.seen_since == expected_since
 
 
 def test_pipeline_records_failure(profile, tmp_path):
