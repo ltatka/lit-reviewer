@@ -17,6 +17,7 @@ class Profile:
     cadence_days: int
     picks_per_run: int
     classic_fraction: float
+    lookback_days: int
     sources_enabled: list[str]
     sources_config: dict[str, dict] = field(default_factory=dict)
 
@@ -51,6 +52,10 @@ class Profile:
         if picks_per_run < 1:
             raise ProfileError("schedule.picks_per_run must be >= 1")
 
+        lookback_days = int(schedule.get("lookback_days", 730))
+        if lookback_days < 1:
+            raise ProfileError("schedule.lookback_days must be >= 1")
+
         # Per-source config: any [sources.<name>] table, minus the scalar `enabled`.
         sources_config = {k: v for k, v in sources.items() if isinstance(v, dict)}
 
@@ -61,6 +66,7 @@ class Profile:
             cadence_days=int(schedule.get("cadence_days", 7)),
             picks_per_run=picks_per_run,
             classic_fraction=classic_fraction,
+            lookback_days=lookback_days,
             sources_enabled=list(enabled),
             sources_config=sources_config,
         )
