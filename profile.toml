@@ -56,6 +56,9 @@ portable_ml = "New ML/AI methods that could plausibly transfer to proteomics or 
 cadence_days = 7
 picks_per_run = 5
 classic_fraction = 0.30
+# How far back to search each run (days). Dedup prevents re-recommending, so a
+# wide window just means "best unseen papers from this range." 730 = ~2 years.
+lookback_days = 730
 
 [sources]
 enabled = ["openalex", "pubmed", "biorxiv"]
@@ -77,3 +80,6 @@ query = '(proteomics OR chemoproteomics OR "target deconvolution" OR ligandabili
 # the best single fit for computational/ML preprints in your space.
 [sources.biorxiv]
 category = "bioinformatics"
+# bioRxiv paginates oldest-first, so it stays a recent-preprint feed regardless
+# of the global lookback_days above. This is its own (recent) window, in days.
+lookback_days = 30
