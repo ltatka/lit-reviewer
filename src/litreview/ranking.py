@@ -44,19 +44,36 @@ class ClaudeRanker:
         if n <= 0 or not candidates:
             return []
         listing = "\n".join(
-            f"[{i}] {c.title}\n    {(c.abstract or '')[:600]}"
+            f"[{i}] {c.title}\n    {(c.abstract or '')[:1500]}"
             for i, c in enumerate(candidates)
         )
         system = (
-            "You select the most relevant scientific papers for a specific "
-            "researcher. Return only indices, best first."
+            "You are a strict curator selecting papers for a specific researcher. "
+            "Apply the researcher's relevance bar literally and conservatively. It "
+            "is much better to return FEWER papers — even none — than to include "
+            "one that does not clearly meet the bar. Never pad the list to reach a "
+            "target count. Return only the 0-based indices of papers that clearly "
+            "qualify, best first."
         )
         prompt = (
             f"Researcher profile:\n{profile.description}\n\n"
             f"Domain focus: {', '.join(profile.domain_focus)}\n"
             f"Portable-ML interest: {profile.portable_ml}\n\n"
-            f"Pick the {n} best of these {len(candidates)} candidates. "
-            f"Return their 0-based indices, best first, at most {n}.\n\n"
+            "Selection bar — a paper qualifies ONLY if a novel ML/AI/computational "
+            "method is its CENTRAL contribution:\n"
+            "- INCLUDE: the main contribution is a new ML/AI method, model, or "
+            "algorithm relevant to the domain focus above, OR a broadly interesting "
+            "ML method that could plausibly transfer to it.\n"
+            "- EXCLUDE: purely biological / wet-lab / mass-spec / DIA / proteomics "
+            "papers with no novel ML contribution, however good the biology.\n"
+            "- EXCLUDE: papers where ML is merely applied as an off-the-shelf tool "
+            "to process or analyze data ('we used a neural network to analyze our "
+            "results'). The methodological novelty, not the application, must be the "
+            "point.\n"
+            "When uncertain, EXCLUDE.\n\n"
+            f"From these {len(candidates)} candidates, return the 0-based indices of "
+            f"AT MOST {n} that clearly meet the bar, best first. Return an empty "
+            "list if none qualify. Do not include borderline or filler papers.\n\n"
             f"{listing}"
         )
         msg = self._client.messages.parse(

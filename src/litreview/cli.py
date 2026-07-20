@@ -49,6 +49,9 @@ def status_command(args) -> int:
 
 def init_classics_command(args, *, drafter=None) -> int:
     profile, archive = _load(args)
+    if args.reset:
+        archive.clear_classics()
+        print("Cleared existing classics backlog.")
     entries = init_classics(profile, archive, drafter or ClaudeClassicsDrafter(), n=args.n)
     print(f"Drafted {len(entries)} classics (review, then edit the DB if needed):")
     for e in entries:
@@ -77,6 +80,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     ic = sub.add_parser("init-classics")
     ic.add_argument("-n", type=int, default=20)
+    ic.add_argument("--reset", action="store_true",
+                    help="clear the existing classics backlog before drafting")
 
     sv = sub.add_parser("serve")
     sv.add_argument("--host", default="127.0.0.1")

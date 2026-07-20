@@ -35,6 +35,16 @@ def test_cli_init_classics_and_run(tmp_path, capsys, monkeypatch):
     assert rc == 0
     assert "Foundational Paper 1" in capsys.readouterr().out
 
+    # --reset wipes the prior backlog before drafting (no duplicates accumulate)
+    from litreview.archive import Archive
+    rc = cli.main(["--profile", str(prof), "--db", str(db), "init-classics", "-n", "3", "--reset"],
+                  drafter=FakeClassicsDrafter())
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "Cleared existing classics backlog." in out
+    # 3 drafted, reset first -> exactly 3 pending, not 6
+    assert len(Archive(str(db)).pending_classics(limit=100)) == 3
+
     # run with a stub source injected via monkeypatch on build_sources
     from litreview.models import Candidate
 

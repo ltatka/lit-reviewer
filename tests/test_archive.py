@@ -160,6 +160,15 @@ def test_classics_lifecycle(archive):
     assert [e.title for e in pending] == ["Foundational A"]
 
 
+def test_clear_classics_empties_the_backlog(archive):
+    archive.add_classics([
+        ClassicEntry(title="Foundational A", note="must read", rank=1),
+        ClassicEntry(title="Foundational B", note="must read", rank=2),
+    ])
+    archive.clear_classics()
+    assert archive.pending_classics(limit=10) == []
+
+
 def test_store_selection_flips_matching_classic(archive):
     archive.add_classics([ClassicEntry(title="Foundational A", note="x", doi="10.1/classic", rank=1)])
     run = archive.create_run()

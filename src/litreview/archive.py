@@ -137,6 +137,11 @@ class Archive:
                     (e.title, json.dumps(e.authors), e.doi, e.note, e.rank),
                 )
 
+    def clear_classics(self) -> None:
+        """Delete the entire classics backlog (used by `init-classics --reset`)."""
+        with self._connect() as conn:
+            conn.execute("DELETE FROM classics")
+
     def pending_classics(self, limit: int) -> list[ClassicEntry]:
         with self._connect() as conn:
             rows = conn.execute(

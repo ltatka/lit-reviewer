@@ -41,15 +41,24 @@ class ClaudeClassicsDrafter:
 
     def draft(self, profile: Profile, n: int) -> list[ClassicEntry]:
         system = (
-            "You are a senior scientist building a reading list of foundational, "
-            "must-read papers for a researcher. Rank by importance, most "
-            "foundational first. 'note' says why it is essential."
+            "You are a senior ML scientist building a reading list of foundational, "
+            "must-read papers for a researcher whose interest is machine-learning / "
+            "AI methods — both for their specific domain and broadly transferable "
+            "methods. Every paper you list must have a machine-learning / AI / "
+            "computational method or model as its CENTRAL contribution (e.g. the "
+            "foundational ML architectures, representation-learning, and modeling "
+            "works underpinning their field, plus general ML methods they should "
+            "know). Do NOT include purely biological, wet-lab, or experimental "
+            "papers — even landmark ones — if their core contribution is not a "
+            "computational/ML method. Rank by importance, most foundational first. "
+            "'note' says why it is essential."
         )
         prompt = (
             f"Researcher profile:\n{profile.description}\n"
             f"Domain focus: {', '.join(profile.domain_focus)}\n\n"
-            f"List the {n} most important foundational papers this person should "
-            f"have read. Provide a DOI when you are confident of it, else null."
+            f"List the {n} most important foundational ML/computational papers this "
+            f"person should have read. Provide a DOI when you are confident of it, "
+            f"else null."
         )
         msg = self._client.messages.parse(
             model=MODEL,
